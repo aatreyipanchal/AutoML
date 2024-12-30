@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Batch Prediction</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Batch Prediction</h1>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label for="task_type">Select Task:</label>
+            <select name="task_type" id="task_type" required>
+            <option value="regression">Regression</option>
+            <option value="classification">Classification</option>
+            </select>
+            <label for="file">Upload Dataset:</label>
+            <input type="file" name="file" id="file" required>
+            <label for="target_column">Target Column:</label>
+            <input type="text" name="target_column" id="target_column" placeholder="Enter target column" required>
+            <button type="submit" class="button">Predict</button>
+        </form>
+    </div>
+</body>
+</html>

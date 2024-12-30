@@ -1,0 +1,34 @@
+ <!-- <label for="task">Select Task:</label>
+        <select name="task" id="task" required>
+            <option value="regression">Regression</option>
+            <option value="classification">Classification</option>
+        </select>
+        <br><br> -->
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="/static/css/style.css">
+            <title>Train Model</title>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Train Your Model</h1>
+                <form action="/train" method="post" enctype="multipart/form-data">
+                    <label for="task_type">Select Task:</label>
+                    <select name="task_type" id="task_type" required>
+                    <option value="regression">Regression</option>
+                    <option value="classification">Classification</option>
+                    </select>
+                    <label for="file">Upload Dataset:</label>
+                    <input type="file" name="file" id="file" required>
+                    <label for="target_column">Target Column:</label>
+                    <input type="text" name="target_column" id="target_column" placeholder="Enter target column" required>
+                    <button type="submit" class="button">Train Model</button>
+                </form>
+            </div>
+        </body>
+        </html>
+        

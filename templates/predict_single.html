@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Feature Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555555;
+        }
+
+        input, select {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .feature-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .remove-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background-color: #a71d2a;
+        }
+    </style>
+    <script>
+        let featureCount = 0;
+
+        function addFeature() {
+            featureCount++;
+            const featureContainer = document.getElementById("featuresContainer");
+
+            const featureItem = document.createElement("div");
+            featureItem.classList.add("feature-item");
+            featureItem.setAttribute("id", `featureDiv${featureCount}`);
+
+            const featureName = document.createElement("input");
+            featureName.setAttribute("type", "text");
+            featureName.setAttribute("placeholder", "Feature Name");
+            featureName.classList.add("feature-name");
+            featureItem.appendChild(featureName);
+
+            const featureValue = document.createElement("input");
+            featureValue.setAttribute("type", "text");
+            featureValue.setAttribute("placeholder", "Feature Value");
+            featureValue.classList.add("feature-value");
+            featureItem.appendChild(featureValue);
+
+            const removeButton = document.createElement("button");
+            removeButton.classList.add("remove-button");
+            removeButton.innerText = "Remove";
+            removeButton.onclick = function () {
+                featureItem.remove();
+            };
+            featureItem.appendChild(removeButton);
+
+            featureContainer.appendChild(featureItem);
+        }
+
+        function submitPrediction(event) {
+            event.preventDefault();
+
+            const featureNames = [];
+            const featureValues = [];
+
+            document.querySelectorAll(".feature-name").forEach(input => featureNames.push(input.value));
+            document.querySelectorAll(".feature-value").forEach(input => featureValues.push(input.value));
+
+            const form = document.getElementById("predictionForm");
+            document.getElementById("hiddenFeatureNames").value = featureNames.join(",");
+            document.getElementById("hiddenFeatureValues").value = featureValues.join(",");
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict with Features</h1>
+        <form id="predictionForm" action="/predict_single" method="post" onsubmit="submitPrediction(event)">
+            <label for="task_type">Select Task:</label>
+            <select name="task_type" id="task_type" required>
+                <option value="regression">Regression</option>
+                <option value="classification">Classification</option>
+            </select>
+            <div id="featuresContainer" class="feature-container">
+                <!-- Dynamic feature inputs will be added here -->
+            </div>
+            <button type="button" onclick="addFeature()">Add Feature</button>
+            <input type="hidden" id="hiddenFeatureNames" name="feature_names">
+            <input type="hidden" id="hiddenFeatureValues" name="feature_values">
+            <br><br>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</body>
+</html>
