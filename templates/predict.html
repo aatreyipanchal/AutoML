@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,5 +22,154 @@
             <button type="submit" class="button">Predict</button>
         </form>
     </div>
+    {% if predictions %}
+        <h2>Predictions:</h2>
+        <ul>
+            {% for prediction in predictions %}
+                <li>{{ prediction }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        header, footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+            font-size: 28px;
+            margin: 40px 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 40px auto;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: black;
+            margin: 10px 0;
+        }
+
+        .button {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        .feature-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .remove-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background-color: #a71d2a;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Fintigration.ai</div>
+        <div>Auto ML</div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Choose Prediction Type</h1>
+        <form action="/predict_select" method="get">
+            <button type="submit" class="button" name="prediction_type" value="batch">Batch Prediction</button>
+            <button type="submit" class="button" name="prediction_type" value="single">Single Prediction</button>
+        </form>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        &copy; 2024 Fintigration.ai. All rights reserved.
+    </footer>
+
 </body>
 </html>
+

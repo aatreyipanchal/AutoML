@@ -1,31 +1,9 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>Home</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to Auto ML</h1>
-        <p>Select an option below to get started:</p>
-        <div class="buttons">
-            <a href="/train" class="button">Train Model</a>
-            <a href="/predict" class="button">Batch Prediction</a>
-            <a href="/predict_single" class="button">Single Prediction</a>
-        </div>
-    </div>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>Home</title>
+    <title>Fintigration.ai</title>
     <style>
         body {
             margin: 0;
@@ -71,42 +49,25 @@
         }
 
         .section {
-            width: 25%; /* Ensure consistent width for all sections */
-            height: 300px; /* Set consistent height */
+            width: 30%;
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 10px;
             text-align: center;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .section:hover {
-            transform: scale(1.05);
         }
 
         .section img {
-            width: 100px; /* Set small width */
-            height: 100px; /* Set small height */
-            border-radius: 50%; /* Make it circular */
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
             margin-bottom: 15px;
         }
 
         .section h2 {
             font-size: 20px;
             margin-bottom: 10px;
-            height: 30px; /* Fixed height for consistent alignment */
-        }
-
-        .section p {
-            font-size: 14px;
-            height: 40px; /* Fixed height for consistent alignment */
         }
 
         footer {
@@ -116,15 +77,6 @@
             padding: 10px 0;
         }
     </style>
-    <script>
-        function highlightSection(event) {
-            const sections = document.querySelectorAll('.section');
-            // Reset all sections to their default background color
-            sections.forEach(section => section.style.backgroundColor = '#f9f9f9');
-            // Highlight the clicked section
-            event.currentTarget.style.backgroundColor = '#ddd'; // Light gray for clicked section
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -138,20 +90,20 @@
     </header>
 
     <main>
-        <div class="section" onclick="highlightSection(event); window.location.href='/train';">
-            <img src="static/img/train.jpeg" alt="Machine Learning Training">
+        <div class="section" id="train-model">
+            <img src="https://via.placeholder.com/300x200?text=Train+Model" alt="Machine Learning Training">
             <h2>Train Model</h2>
             <p>Build and train your machine learning models with ease and efficiency.</p>
         </div>
 
-        <div class="section" onclick="highlightSection(event); window.location.href='/predict';">
-            <img src="static/img/prediction1.jpg" alt="Prediction Result">
+        <div class="section" id="prediction">
+            <img src="https://via.placeholder.com/300x200?text=Prediction" alt="Prediction Result">
             <h2>Prediction</h2>
             <p>Make accurate predictions and analyze results with our powerful tools.</p>
         </div>
 
-        <div class="section" onclick="highlightSection(event); window.location.href='/predict_single';">
-            <img src="static/img/save.jpeg" alt="Saved Models">
+        <div class="section" id="saved-models">
+            <img src="https://via.placeholder.com/300x200?text=Saved+Models" alt="Saved Models">
             <h2>Saved Models</h2>
             <p>Manage and deploy your saved models effortlessly.</p>
         </div>
