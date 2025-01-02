@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <title>Save Models</title>
+    <style>
+        body {
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header, footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+        }
+        header {
+            height: 5vh;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        h1 {
+            text-align: center;
+            color: black;
+            font-size: 28px;
+            margin: 40px 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 40px auto;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: black;
+            margin: 10px 0;
+        }
+
+        .button {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        footer {
+            height: 5vh;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .message {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Fintigration.ai</div>
+        <div><h2>Auto ML</h2></div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Save Models</h1>
+
+        <!-- Display Success Message -->
+        {% if message %}
+        <div style="background-color: black;color: white; padding: 0px; margin-bottom: 0px; border: 0px solid #c3e6cb; border-radius: 0px;">
+            <h3>{{ message }}</h3>
+        </div>
+        {% endif %}
+    
+        <form action="/save_models/ {{ task_type }}" method="POST">
+            <label for="preprocessor_name"><b>Preprocessor Model Name:</b></label>
+            <input type="text" id="preprocessor_name" name="preprocessor_name" placeholder="Enter preprocessor model name" required>
+            <br><br>
+            <label for="model_name"><b>Machine Learning Model Name:</b></label>
+            <input type="text" id="model_name" name="model_name" placeholder="Enter ML model name" required>
+            <br><br>
+            <button type="submit" class="button">Submit</button>
+        </form>
+    
+    </div>
+       
+
+    <!-- Footer Section -->
+    <footer>
+        &copy; 2024 Fintigration.ai. All rights reserved.
+    </footer>
+
+</body>
+</html>
+

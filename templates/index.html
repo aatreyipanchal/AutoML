@@ -38,6 +38,7 @@
         }
 
         header {
+            height: 5vh;
             background-color: black;
             color: white;
             display: flex;
@@ -110,6 +111,7 @@
         }
 
         footer {
+            height: 5vh;
             background-color: black;
             color: white;
             text-align: center;
@@ -129,7 +131,7 @@
 <body>
     <header>
         <div class="logo">Fintigration.ai</div>
-        <div>Auto ML</div>
+        <div><h2>Auto ML</h2></div>
         <nav>
             <a href="#home">Home</a>
             <a href="#about">About</a>
@@ -150,7 +152,7 @@
             <p>Make accurate predictions and analyze results with our powerful tools.</p>
         </div>
 
-        <div class="section" onclick="highlightSection(event); window.location.href='/predict_single';">
+        <div class="section" onclick="highlightSection(event); window.location.href='/all_models';">
             <img src="static/img/save.jpeg" alt="Saved Models">
             <h2>Saved Models</h2>
             <p>Manage and deploy your saved models effortlessly.</p>

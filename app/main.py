@@ -1,8 +1,10 @@
 import os, sys
+import shutil
 import io
 
 from fastapi import FastAPI, File, UploadFile, Form, Request, HTTPException
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
+
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -178,6 +180,64 @@ async def download_preprocessor(task_type: str):
         raise HTTPException(status_code=404, detail="Preprocessor file not found.")
     return FileResponse(preprocessor_path, media_type='application/octet-stream', filename=f"preprocessor_{task_type}.pkl")
 
+@app.get("/save_models/{task_type}")
+async def save_model(task_type: str, request: Request):
+    return templates.TemplateResponse("save_model.html", {"request": request, "task_type": task_type} )
+
+@app.post("/save_models/{task_type}")
+async def save_model_local(task_type: str, request: Request, preprocessor_name: str = Form(...),
+    model_name: str = Form(...)):
+    
+    task_type = task_type.strip()
+
+    # preprocessor_name: str = Form(...),
+    # model_name: str = Form(...),
+    
+    # preprocessor_path = f"static/models/preprocessor_{task_type}.pkl"
+    # model_path = "static/models/best_model.pkl"
+    
+     # Use absolute paths to avoid current working directory issues
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    preprocessor_path = os.path.join(base_dir, f"..\\static\\models\\preprocessor_{task_type}.pkl")
+    model_path = os.path.join(base_dir, "..\\static\\models\\best_model.pkl")
+    
+    artifacts_folder = os.path.join(base_dir, "..\\artifacts")
+    os.makedirs(artifacts_folder, exist_ok=True)   # Ensure the folder exists
+    
+    preprocessor_dest_path = os.path.join(artifacts_folder, f"{preprocessor_name}.pkl")
+    model_dest_path = os.path.join(artifacts_folder, f"{model_name}.pkl")
+    
+    # C:\office\tasks\AutoML\static\models\best_model.pkl
+    
+    try:
+        # Copy and rename the preprocessor model
+        shutil.copy(preprocessor_path, preprocessor_dest_path)
+
+        # Copy and rename the machine learning model
+        shutil.copy(model_path, model_dest_path)
+
+        # return JSONResponse(
+        #     content={
+        #         "message": "Models successfully saved.",
+        #         "preprocessor_path": preprocessor_dest_path,
+        #         "model_path": model_dest_path
+        #     },
+        #     status_code=200
+        # )
+        
+        return templates.TemplateResponse("save_model.html", {"request": request, "task_type": task_type, "message": "Models successfully saved."})
+
+    except FileNotFoundError as e:
+        return JSONResponse(
+            content={"error": f"File not found: {e}"},
+            status_code=404
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={"error": f"An error occurred: {e}"},
+            status_code=500
+        )
+
 @app.get("/predict", response_class=HTMLResponse)
 async def predict_page(request: Request):
     """Page for making predictions."""
@@ -272,3 +332,43 @@ async def predict_single_via_form(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
+# @app.get("/all_models", response_class=HTMLResponse)
+# async def all_models(request: Request):
+#     return templates.TemplateResponse("all_models.html", {
+#         "request": request
+#     })
+    
+    
+@app.get("/all_models", response_class=HTMLResponse)
+async def all_models_post(request: Request):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Path to the artifacts folder
+    artifacts_folder = os.path.join(base_dir, "..\\artifacts")
+    
+    # Ensure the folder exists
+    if not os.path.exists(artifacts_folder):
+        return templates.TemplateResponse("all_models.html", {
+            "request": request,
+            "preprocessor_models": [],
+            "ml_models": [],
+            "message": "Artifacts folder not found."
+        })
+    
+    # List files in the artifacts folder
+    all_models = os.listdir(artifacts_folder)
+    
+    # Separate models into preprocessors and ML models based on the name
+    preprocessor_models = [model for model in all_models if "preprocessor" in model.lower()]
+    ml_models = [model for model in all_models if "preprocessor" not in model.lower()]
+    
+    # Render the template with the models
+    return templates.TemplateResponse("all_models.html", {
+        "request": request,
+        "preprocessor_models": preprocessor_models,
+        "ml_models": ml_models,
+        "message": None if all_models else "No models found in the artifacts folder."
+    })
+    
