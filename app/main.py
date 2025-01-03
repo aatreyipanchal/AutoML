@@ -82,6 +82,7 @@ async def train_model(
 
     # Determine task type models
     models = regression_models if task_type == "regression" else classification_models
+    model_names = list(models.keys())  # List of all model names
 
     # Initialize LabelEncoder for classification tasks
     label_encoder = None
@@ -124,6 +125,7 @@ async def train_model(
     best_model = None
     best_score = float('-inf') if task_type == "classification" else float('inf')
     best_model_name = ""
+    model_scores = {}
 
     for model_name, model in models.items():
         # Optuna for hyperparameter optimization
@@ -149,6 +151,8 @@ async def train_model(
         model.fit(X_train, y_train)
 
         score = evaluate_model(model, X_test, y_test, task_type)
+        model_scores[model_name] = score
+
         if (task_type == "regression" and score < best_score) or (task_type == "classification" and score > best_score):
             best_score = score
             best_model = model
@@ -161,10 +165,13 @@ async def train_model(
 
     return templates.TemplateResponse("train_result.html", {
         "request": request,
+        "model_names": model_names,
+        "model_scores": model_scores,
         "best_model_name": best_model_name,
         "best_score": best_score,
         "task_type": task_type
     })
+
 
 @app.get("/download_model/{task_type}")
 async def download_model(task_type: str):
@@ -184,31 +191,79 @@ async def download_preprocessor(task_type: str):
 async def save_model(task_type: str, request: Request):
     return templates.TemplateResponse("save_model.html", {"request": request, "task_type": task_type} )
 
-@app.post("/save_models/{task_type}")
-async def save_model_local(task_type: str, request: Request, preprocessor_name: str = Form(...),
-    model_name: str = Form(...)):
+# @app.post("/save_models/{task_type}")
+# async def save_model_local(task_type: str, request: Request, preprocessor_name: str = Form(...),
+#     model_name: str = Form(...)):
     
+#     task_type = task_type.strip()
+
+#     # preprocessor_name: str = Form(...),
+#     # model_name: str = Form(...),
+    
+#     # preprocessor_path = f"static/models/preprocessor_{task_type}.pkl"
+#     # model_path = "static/models/best_model.pkl"
+    
+#      # Use absolute paths to avoid current working directory issues
+#     base_dir = os.path.dirname(os.path.abspath(__file__))
+#     preprocessor_path = os.path.join(base_dir, f"F:/Projects/AutoML/static/models/preprocessor_{task_type}.pkl")
+#     model_path = os.path.join(base_dir, "F:/Projects/AutoML/static/models/best_model.pkl")
+    
+#     artifacts_folder = os.path.join(base_dir, "..\\artifacts")
+#     os.makedirs(artifacts_folder, exist_ok=True)   # Ensure the folder exists
+    
+#     preprocessor_dest_path = os.path.join(artifacts_folder, f"{preprocessor_name}.pkl")
+#     model_dest_path = os.path.join(artifacts_folder, f"{model_name}.pkl")
+    
+#     # C:\office\tasks\AutoML\static\models\best_model.pkl
+    
+#     try:
+#         # Copy and rename the preprocessor model
+#         shutil.copy(preprocessor_path, preprocessor_dest_path)
+
+#         # Copy and rename the machine learning model
+#         shutil.copy(model_path, model_dest_path)
+
+#         # return JSONResponse(
+#         #     content={
+#         #         "message": "Models successfully saved.",
+#         #         "preprocessor_path": preprocessor_dest_path,
+#         #         "model_path": model_dest_path
+#         #     },
+#         #     status_code=200
+#         # )
+        
+#         return templates.TemplateResponse("save_model.html", {"request": request, "task_type": task_type, "message": "Models successfully saved."})
+
+#     except FileNotFoundError as e:
+#         return JSONResponse(
+#             content={"error": f"File not found: {e}"},
+#             status_code=404
+#         )
+#     except Exception as e:
+#         return JSONResponse(
+#             content={"error": f"An error occurred: {e}"},
+#             status_code=500
+#         )
+
+@app.post("/save_models/{task_type}")
+async def save_model_local(task_type: str, request: Request, preprocessor_name: str = Form(...), model_name: str = Form(...)):
     task_type = task_type.strip()
 
-    # preprocessor_name: str = Form(...),
-    # model_name: str = Form(...),
-    
-    # preprocessor_path = f"static/models/preprocessor_{task_type}.pkl"
-    # model_path = "static/models/best_model.pkl"
-    
-     # Use absolute paths to avoid current working directory issues
+    # Use absolute paths to avoid current working directory issues
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    preprocessor_path = os.path.join(base_dir, f"..\\static\\models\\preprocessor_{task_type}.pkl")
-    model_path = os.path.join(base_dir, "..\\static\\models\\best_model.pkl")
     
+    # Define paths dynamically based on task type
+    preprocessor_path = os.path.join(base_dir, f"static\models\preprocessor_{task_type}.pkl")
+    model_path = os.path.join(base_dir, "static\models\best_model.pkl")
+
+    # Define the artifacts folder
     artifacts_folder = os.path.join(base_dir, "..\\artifacts")
-    os.makedirs(artifacts_folder, exist_ok=True)   # Ensure the folder exists
-    
+    os.makedirs(artifacts_folder, exist_ok=True)  # Ensure the folder exists
+
+    # Define the destination paths for saved models
     preprocessor_dest_path = os.path.join(artifacts_folder, f"{preprocessor_name}.pkl")
     model_dest_path = os.path.join(artifacts_folder, f"{model_name}.pkl")
-    
-    # C:\office\tasks\AutoML\static\models\best_model.pkl
-    
+
     try:
         # Copy and rename the preprocessor model
         shutil.copy(preprocessor_path, preprocessor_dest_path)
@@ -216,16 +271,11 @@ async def save_model_local(task_type: str, request: Request, preprocessor_name: 
         # Copy and rename the machine learning model
         shutil.copy(model_path, model_dest_path)
 
-        # return JSONResponse(
-        #     content={
-        #         "message": "Models successfully saved.",
-        #         "preprocessor_path": preprocessor_dest_path,
-        #         "model_path": model_dest_path
-        #     },
-        #     status_code=200
-        # )
-        
-        return templates.TemplateResponse("save_model.html", {"request": request, "task_type": task_type, "message": "Models successfully saved."})
+        return templates.TemplateResponse("save_model.html", {
+            "request": request, 
+            "task_type": task_type, 
+            "message": "Models successfully saved."
+        })
 
     except FileNotFoundError as e:
         return JSONResponse(
@@ -238,10 +288,16 @@ async def save_model_local(task_type: str, request: Request, preprocessor_name: 
             status_code=500
         )
 
+
+@app.get("/predict_select", response_class=HTMLResponse)
+async def select_predictions(request:Request):
+    return templates.TemplateResponse("predict.html", {"request": request})
+
+
 @app.get("/predict", response_class=HTMLResponse)
 async def predict_page(request: Request):
     """Page for making predictions."""
-    return templates.TemplateResponse("predict.html", {"request": request})
+    return templates.TemplateResponse("batch_predictions.html", {"request": request})
 
 @app.post("/predict")
 async def predict(
@@ -268,17 +324,36 @@ async def predict(
         raise HTTPException(status_code=404, detail="Model file not found.")
     model = joblib.load(model_path)
 
-    label_encoder_path = "static/models/label_encoder.pkl"
-    label_encoder = joblib.load(label_encoder_path) if os.path.exists(label_encoder_path) else None
+    try:
+        # Perform predictions
+        predictions = model.predict(X_transformed)
 
-    predictions = model.predict(X_transformed)
-    if label_encoder:
-        predictions = label_encoder.inverse_transform(predictions.astype(int))
+        # Format predictions for output
+        if task_type == "classification":
+            predictions = [int(pred) for pred in predictions]
+        elif task_type == "regression":
+            predictions = [float(pred) for pred in predictions]
 
-    return templates.TemplateResponse("predict_result.html", {
-        "request": request,
-        "predictions": predictions.tolist()
-    })
+        # Add predictions to the original data
+        data["Predictions"] = predictions
+
+        # Save the predictions as a CSV
+        output_csv_path = "static/output/predictions.csv"
+        os.makedirs(os.path.dirname(output_csv_path), exist_ok=True)
+        data.to_csv(output_csv_path, index=False)
+
+        return templates.TemplateResponse(
+            "predict_result.html", 
+            {
+                "request": request,
+                "message": "Predictions generated successfully.",
+                "download_link": f"/static/output/predictions.csv"
+            }
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while predicting: {e}")
+
 
 
 @app.get("/predict_single", response_class=HTMLResponse)
