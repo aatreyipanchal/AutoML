@@ -246,18 +246,20 @@ async def save_model(task_type: str, request: Request):
 #         )
 
 @app.post("/save_models/{task_type}")
-async def save_model_local(task_type: str, request: Request, preprocessor_name: str = Form(...), model_name: str = Form(...)):
+async def save_model_local(
+    task_type: str, request: Request, preprocessor_name: str = Form(...), model_name: str = Form(...)
+):
     task_type = task_type.strip()
 
     # Use absolute paths to avoid current working directory issues
     base_dir = os.path.dirname(os.path.abspath(__file__))
     
     # Define paths dynamically based on task type
-    preprocessor_path = os.path.join(base_dir, f"static\models\preprocessor_{task_type}.pkl")
-    model_path = os.path.join(base_dir, "static\models\best_model.pkl")
+    preprocessor_path = os.path.join(base_dir, f"static/models/preprocessor_{task_type}.pkl")
+    model_path = os.path.join(base_dir, "static/models/best_model.pkl")
 
     # Define the artifacts folder
-    artifacts_folder = os.path.join(base_dir, "..\\artifacts")
+    artifacts_folder = os.path.join(base_dir, "../artifacts")
     os.makedirs(artifacts_folder, exist_ok=True)  # Ensure the folder exists
 
     # Define the destination paths for saved models
@@ -265,17 +267,32 @@ async def save_model_local(task_type: str, request: Request, preprocessor_name: 
     model_dest_path = os.path.join(artifacts_folder, f"{model_name}.pkl")
 
     try:
+        # Debugging paths
+        print(f"Preprocessor path: {preprocessor_path}")
+        print(f"Model path: {model_path}")
+        print(f"Artifacts folder: {artifacts_folder}")
+
+        # Check if files exist
+        if not os.path.exists(preprocessor_path):
+            return JSONResponse(content={"error": f"Preprocessor file not found: {preprocessor_path}"}, status_code=404)
+
+        if not os.path.exists(model_path):
+            return JSONResponse(content={"error": f"Model file not found: {model_path}"}, status_code=404)
+
         # Copy and rename the preprocessor model
         shutil.copy(preprocessor_path, preprocessor_dest_path)
 
         # Copy and rename the machine learning model
         shutil.copy(model_path, model_dest_path)
 
-        return templates.TemplateResponse("save_model.html", {
-            "request": request, 
-            "task_type": task_type, 
-            "message": "Models successfully saved."
-        })
+        return templates.TemplateResponse(
+            "save_model.html",
+            {
+                "request": request, 
+                "task_type": task_type, 
+                "message": "Models successfully saved."
+            }
+        )
 
     except FileNotFoundError as e:
         return JSONResponse(
