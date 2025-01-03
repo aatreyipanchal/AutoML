@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Models</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            color: #333;
+        }
+
+        header {
+            height:5vh;
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        .section {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .model-list {
+            max-height: 300px; /* Scrollable list */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .model-item {
+            color: white;
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: black;
+        }
+
+        .message {
+            text-align: center;
+            color: red;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        footer {
+            height:5vh;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: sticky;
+            bottom: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Fintigration.ai</div>
+        <div><h2>Auto ML</h2></div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2><center>All Models</center></h2>
+
+            {% if message %}
+                <p class="message">{{ message }}</p>
+            {% else %}
+                <div class="section">
+                    <h2>Preprocessor Models</h2>
+                    <div class="model-list">
+                        {% for model in preprocessor_models %}
+                            <div class="model-item">{{ model }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Machine Learning Models</h2>
+                    <div class="model-list">
+                        {% for model in ml_models %}
+                            <div class="model-item">{{ model }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2024 Fintigration.ai. All rights reserved.
+    </footer>
+</body>
+</html>

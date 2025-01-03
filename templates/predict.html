@@ -1,0 +1,173 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Batch Prediction</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Batch Prediction</h1>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label for="task_type">Select Task:</label>
+            <select name="task_type" id="task_type" required>
+            <option value="regression">Regression</option>
+            <option value="classification">Classification</option>
+            </select>
+            <label for="file">Upload Dataset:</label>
+            <input type="file" name="file" id="file" required>
+            <label for="target_column">Target Column:</label>
+            <input type="text" name="target_column" id="target_column" placeholder="Enter target column" required>
+            <button type="submit" class="button">Predict</button>
+        </form>
+    </div>
+    {% if predictions %}
+        <h2>Predictions:</h2>
+        <ul>
+            {% for prediction in predictions %}
+                <li>{{ prediction }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+            font-size: 28px;
+            margin: 40px 0;
+        }
+
+        .container {
+            width: 50%;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: black;
+            margin: 10px 0;
+        }
+
+        .button {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Fintigration.ai</div>
+        <div>Auto ML</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <h1>Choose Prediction Type</h1>
+            <form action="/predict" method="get">
+                <button type="submit" class="button" name="prediction_type" value="batch">Batch Prediction</button>
+            </form>
+            <form action="/predict_single" method="get">
+                <button type="submit" class="button" name="prediction_type" value="single">Single Prediction</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        &copy; 2024 Fintigration.ai. All rights reserved.
+    </footer>
+
+</body>
+</html>

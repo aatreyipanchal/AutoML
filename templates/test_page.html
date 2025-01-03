@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintigration.ai</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .section {
+            width: 30%;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Fintigration.ai</div>
+        <div>Auto ML</div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="section" id="train-model">
+            <img src="https://via.placeholder.com/300x200?text=Train+Model" alt="Machine Learning Training">
+            <h2>Train Model</h2>
+            <p>Build and train your machine learning models with ease and efficiency.</p>
+        </div>
+
+        <div class="section" id="prediction">
+            <img src="https://via.placeholder.com/300x200?text=Prediction" alt="Prediction Result">
+            <h2>Prediction</h2>
+            <p>Make accurate predictions and analyze results with our powerful tools.</p>
+        </div>
+
+        <div class="section" id="saved-models">
+            <img src="https://via.placeholder.com/300x200?text=Saved+Models" alt="Saved Models">
+            <h2>Saved Models</h2>
+            <p>Manage and deploy your saved models effortlessly.</p>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2024 Fintigration.ai. All rights reserved.
+    </footer>
+</body>
+</html>
