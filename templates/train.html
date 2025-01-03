@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Train Model</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .container h1 {
+            font-size: 24px;
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            text-align: left;
+            color: black;
+        }
+
+        input[type="file"], input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .button {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        .description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header Section -->
+        <header>
+            <div class="logo">Fintigration.ai</div>
+            <div>Auto ML</div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact Us</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <div class="container">
+                <h1>Train Your Model</h1>
+                <div class="description">
+                    Upload your dataset, select a task type, and train a machine learning model in just a few clicks. Once training is complete, you can download the best model and preprocessor.
+                </div>
+                <form action="/train" method="post" enctype="multipart/form-data">
+                    <label for="task_type" title="Choose the type of ML task you want to perform (e.g., Regression or Classification)">
+                        Select Task:
+                    </label>
+                    <select name="task_type" id="task_type" required>
+                        <option value="regression">Regression</option>
+                        <option value="classification">Classification</option>
+                    </select>
+
+                    <label for="file" title="Upload your dataset in CSV format">
+                        Upload Dataset:
+                    </label>
+                    <input type="file" name="file" id="file" required>
+
+                    <label for="target_column" title="Specify the column in your dataset you want to predict">
+                        Target Column:
+                    </label>
+                    <input type="text" name="target_column" id="target_column" placeholder="Enter target column" required>
+
+                    <button type="submit" class="button">Train Model</button>
+                </form>
+
+                <!-- Model Download Section -->
+                {% if best_model_name %}
+                <h2>Best Model: {{ best_model_name }}</h2>
+                <a href="/static/models/best_model.pkl" download class="button">Download Best Model</a><br>
+                <a href="/static/models/preprocessor_{{ task_type }}.pkl" download class="button">Download Preprocessor</a>
+                {% endif %}
+            </div>
+        </main>
+
+        <!-- Footer Section -->
+        <footer>
+            &copy; 2024 Fintigration.ai. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>
