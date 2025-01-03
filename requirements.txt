@@ -9,5 +9,7 @@ xgboost
 matplotlib
 jinja2
 optuna
+starlette 
+itsdangerous
 
 - e.

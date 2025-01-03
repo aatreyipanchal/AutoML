@@ -4,6 +4,8 @@ import io
 
 from fastapi import FastAPI, File, UploadFile, Form, Request, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
+from starlette.middleware.sessions import SessionMiddleware
+from typing import Optional
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -25,6 +27,10 @@ from app.utils import evaluate_model, save_model
 
 
 app = FastAPI()
+
+# Secret key for session encryption
+SECRET_KEY = "ABCD@12345"
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 # Setting up static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -73,6 +79,9 @@ async def train_model(
     target_column: str = Form(...),
     task_type: str = Form(...)  # "regression" or "classification"
 ):
+    
+    request.session["task_type"] = task_type
+    
     """Trains models dynamically for regression or classification."""
     # Load data
     file_content = await file.read()
@@ -249,14 +258,14 @@ async def save_model(task_type: str, request: Request):
 async def save_model_local(
     task_type: str, request: Request, preprocessor_name: str = Form(...), model_name: str = Form(...)
 ):
-    task_type = task_type.strip()
+    task_type = request.session.get("task_type")
 
     # Use absolute paths to avoid current working directory issues
     base_dir = os.path.dirname(os.path.abspath(__file__))
     
     # Define paths dynamically based on task type
-    preprocessor_path = os.path.join(base_dir, f"static/models/preprocessor_{task_type}.pkl")
-    model_path = os.path.join(base_dir, "static/models/best_model.pkl")
+    preprocessor_path = os.path.join(base_dir, f"..\\static\\models\\preprocessor_{task_type}.pkl")
+    model_path = os.path.join(base_dir, "..\\static\\models\\best_model.pkl")
 
     # Define the artifacts folder
     artifacts_folder = os.path.join(base_dir, "../artifacts")
@@ -463,4 +472,12 @@ async def all_models_post(request: Request):
         "ml_models": ml_models,
         "message": None if all_models else "No models found in the artifacts folder."
     })
+    
+    
+@app.get("/get-task-type")
+async def get_task_type(request: Request):
+    task_type = request.session.get("task_type")
+    if not task_type:
+        return {"error": "No task type found in session."}
+    return {"task_type": task_type}
     
